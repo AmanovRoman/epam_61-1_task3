@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:property-placeholder location="classpath:auditorium.properties"/>
+    <bean id="conversionService"
+          class="org.springframework.context.support.ConversionServiceFactoryBean"/>
+
+    <!-- entities -->
+    <bean name="user" class="com.epam.spring.hometask.domain.User" scope="prototype"/>
+    <bean name="event" class="com.epam.spring.hometask.domain.Event" scope="prototype"/>
+
+    <bean name="ticket" class="com.epam.spring.hometask.domain.Ticket" scope="prototype"/>
+    <bean name="events" class="com.epam.spring.hometask.domain.ScheduledEvents" scope="prototype"/>
+
+    <!-- database -->
+    <bean name="database" class="com.epam.spring.hometask.data.FakeDatabase" init-method="init"/>
+
+    <!-- services -->
+    <bean name="userService" class="com.epam.spring.hometask.service.data.simple.UserServiceSimple"/>
+    <bean name="ticketService" class="com.epam.spring.hometask.service.data.simple.TicketServiceSimple"/>
+    <bean name="eventService" class="com.epam.spring.hometask.service.data.simple.EventServiceSimple">
+        <constructor-arg>
+            <list>
+                <bean class="com.epam.spring.hometask.domain.Event">
+                    <constructor-arg index="0" value="${event.name}"/>
+                    <constructor-arg index="1" value="${event.basePrice}"/>
+                    <constructor-arg index="2" value="${event.rating}"/>
+                </bean>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean name="auditoriumService" class="com.epam.spring.hometask.service.data.simple.AuditoriumServiceSimple">
+        <constructor-arg>
+            <list>
+                <bean name="auditorium" class="com.epam.spring.hometask.domain.Auditorium">
+                    <constructor-arg index="0" value="${auditory.first.Name}"/>
+                    <constructor-arg index="1" value="${auditory.first.Seats}"/>
+                    <constructor-arg index="2" value="${auditory.first.Vips}"/>
+                    <constructor-arg index="3" value="${auditory.vipMult}"/>
+                </bean>
+                <bean name="auditorium" class="com.epam.spring.hometask.domain.Auditorium">
+                    <constructor-arg index="0" value="${auditory.second.Name}"/>
+                    <constructor-arg index="1" value="${auditory.second.Seats}"/>
+                    <constructor-arg index="2" value="${auditory.second.Vips}"/>
+                    <constructor-arg index="3" value="${auditory.vipMult}"/>
+                </bean>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean name="discountService" class="com.epam.spring.hometask.service.data.common.DiscountServiceImpl">
+        <constructor-arg>
+            <list>
+                <bean class="com.epam.spring.hometask.domain.strategies.discount.TicketsOverStrategy">
+                    <constructor-arg index="0" value="${discount.tickets.over.value}"/>
+                    <constructor-arg index="1" value="${discount.tickets.over.rule}"/>
+                </bean>
+                <bean class="com.epam.spring.hometask.domain.strategies.discount.TicketsEveryNthStrategy">
+                    <constructor-arg index="0" value="${discount.tickets.everyNth.value}"/>
+                    <constructor-arg index="1" value="${discount.tickets.everyNth.rule}"/>
+                </bean>
+                <bean class="com.epam.spring.hometask.domain.strategies.discount.EventStrategy">
+                    <constructor-arg index="0" value="${discount.events.value}"/>
+                    <constructor-arg index="1" value="${discount.events.rule}"/>
+                </bean>
+                <bean class="com.epam.spring.hometask.domain.strategies.discount.BirthdayStrategy">
+                    <constructor-arg index="0" value="${discount.birthday.value}"/>
+                    <constructor-arg index="1" value="${discount.birthday.rule}"/>
+                </bean>
+                <bean class="com.epam.spring.hometask.domain.strategies.discount.RegisteredUserStrategy">
+                    <constructor-arg index="0" value="${discount.registeredUser.value}"/>
+                </bean>
+            </list>
+        </constructor-arg>
+    </bean>
+
+</beans>
