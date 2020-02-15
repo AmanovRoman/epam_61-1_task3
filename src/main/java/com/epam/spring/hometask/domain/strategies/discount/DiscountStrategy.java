@@ -10,4 +10,7 @@ import com.epam.spring.hometask.domain.User;
  */
 public interface DiscountStrategy {
     double calculate(User user, ScheduledEvents scheduler, int ticketsAmount, Ticket ticket);
+    String getDiscountTitle();
+    double getDiscountValue();
+    User getLastUser();
 }

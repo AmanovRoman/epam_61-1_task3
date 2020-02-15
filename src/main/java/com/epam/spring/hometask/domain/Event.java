@@ -1,12 +1,16 @@
 package com.epam.spring.hometask.domain;
 
 import com.epam.spring.hometask.domain.enums.EventRating;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
 /**
  * @author Yuriy_Tkach
  */
+@Component
+@Scope("prototype")
 public class Event extends DomainId {
 
     private String name;
