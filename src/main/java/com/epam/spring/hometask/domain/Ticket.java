@@ -1,35 +1,43 @@
 package com.epam.spring.hometask.domain;
 
-import java.time.LocalDateTime;
+import com.epam.spring.hometask.domain.strategies.discount.DiscountStrategy;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import java.util.Objects;
 
 /**
  * @author Yuriy_Tkach
  */
+@Component
+@Scope("prototype")
 public class Ticket extends DomainId {
 
     private int userId;
 
     private int scheduledEventId;
 
-    private long seat;
+    private int seat;
 
     private double price;
+
+    private String discount;
+    private double discountValue;
 
     public Ticket() {
     }
 
-    public Ticket(int userId, int scheduledEventId, long seat) {
+    public Ticket(int userId, int scheduledEventId, int seat) {
         this.userId = userId;
         this.scheduledEventId = scheduledEventId;
         this.seat = seat;
     }
 
-    public long getSeat() {
+    public int getSeat() {
         return seat;
     }
 
-    public void setSeat(long seat) {
+    public void setSeat(int seat) {
         this.seat = seat;
     }
 
@@ -57,6 +65,22 @@ public class Ticket extends DomainId {
         this.price = price;
     }
 
+    public String getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(DiscountStrategy discount) {
+        this.discount = discount.getDiscountTitle();
+    }
+
+    public double getDiscountValue() {
+        return discountValue;
+    }
+
+    public void setDiscountValue(double discountValue) {
+        this.discountValue = discountValue;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -75,10 +99,13 @@ public class Ticket extends DomainId {
     @Override
     public String toString() {
         return "Ticket{" +
-                "Id=" + getId() +
+                " Id=" + getId() +
                 ", userId=" + userId +
                 ", scheduledEventId=" + scheduledEventId +
                 ", seat=" + seat +
+                ", price=" + price +
+                ", discount='" + discount + '\'' +
+                ", discountValue=" + discountValue +
                 '}';
-}
+    }
 }

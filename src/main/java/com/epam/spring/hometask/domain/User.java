@@ -1,6 +1,8 @@
 package com.epam.spring.hometask.domain;
 
 import com.epam.spring.hometask.domain.enums.UserType;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -8,6 +10,9 @@ import java.util.Objects;
 /**
  * @author Yuriy_Tkach
  */
+
+@Component
+@Scope("prototype")
 public class User extends DomainId {
 
     private String firstName;

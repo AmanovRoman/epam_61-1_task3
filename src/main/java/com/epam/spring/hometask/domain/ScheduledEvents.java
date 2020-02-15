@@ -1,7 +1,12 @@
 package com.epam.spring.hometask.domain;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import java.time.LocalDateTime;
 
+@Component
+@Scope("prototype")
 public class ScheduledEvents extends DomainId {
     private int eventId;
     private int auditoriumId;

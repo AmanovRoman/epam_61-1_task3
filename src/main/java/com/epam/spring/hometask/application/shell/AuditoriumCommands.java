@@ -1,14 +1,14 @@
 package com.epam.spring.hometask.application.shell;
 
 import com.epam.spring.hometask.domain.Auditorium;
-import com.epam.spring.hometask.service.repository.AuditoriumServiceDao;
+import com.epam.spring.hometask.service.business.AuditoriumServiceDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
-import utils.ContextReceiver;
 
 /**
  * @author Roman_Amanov
- *
+ * <p>
  * Class uses for Auditorium controlls
  * Type 'help' in shell to see all commands
  */
@@ -16,20 +16,18 @@ import utils.ContextReceiver;
 @ShellComponent
 public class AuditoriumCommands {
 
+    @Autowired
+    AuditoriumServiceDao auditoriumService;
+
     @ShellMethod(value = "Show whole auditorium list", key = "auds")
-    public static String showAuditories() {
-        StringBuilder out = new StringBuilder("Auditoriums:\n-------------------------------\n");
-        AuditoriumServiceDao auditoriumService = (AuditoriumServiceDao) ContextReceiver.getContext().getBean("auditoriumService");
-        for (Auditorium auditorium : auditoriumService.getAll()) {
-            out.append(auditorium).append("\n");
-        }
-        return out.append("-------------------------------\n").toString();
+    public void showAuditories() {
+        System.out.println("\nAUDITORIUMS:\n----------------------------------------");
+        auditoriumService.getAllAuditoriums().forEach(System.out::println);
     }
 
     @ShellMethod(value = "Show auditorium by ID (id)", key = "aud get")
-    public static Auditorium showAuditoryById(int id) {
-        AuditoriumServiceDao auditoriumService = (AuditoriumServiceDao) ContextReceiver.getContext().getBean("auditoriumService");
-        return auditoriumService.getById(id);
+    public Auditorium showAuditoryById(int id) {
+        return auditoriumService.getAuditoriumById(id);
     }
 
 }

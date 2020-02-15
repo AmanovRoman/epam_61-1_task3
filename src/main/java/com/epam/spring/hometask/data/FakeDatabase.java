@@ -1,32 +1,37 @@
 package com.epam.spring.hometask.data;
 
 import com.epam.spring.hometask.domain.*;
+import com.epam.spring.hometask.domain.strategies.discount.DiscountStrategy;
+import com.epam.spring.hometask.domain.utils.CommonInformation;
+import com.epam.spring.hometask.domain.utils.DiscountInformation;
+import org.springframework.stereotype.Component;
 
-import java.util.*;
+import javax.annotation.PostConstruct;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Roman_Amanov
- *
+ * <p>
  * Fake database representation
  */
+
+@Component
 public class FakeDatabase {
 
-    private Map<Integer, User> users;
-    private Map<Integer, Ticket> tickets;
-    private Map<Integer, Event> events;
-    private Map<Integer, Auditorium> auditoriums;
-    private Map<Integer, ScheduledEvents> scheduledEvents;
-
+    private Map<Integer, User> users = new HashMap<>();
+    private Map<Integer, Ticket> tickets = new HashMap<>();
+    private Map<Integer, Event> events = new HashMap<>();
+    private Map<Integer, Auditorium> auditoriums = new HashMap<>();
+    private Map<Integer, ScheduledEvents> scheduledEvents = new HashMap<>();
+    private Map<Event, CommonInformation> commonInfo = new HashMap<>();
+    private Map<DiscountStrategy, DiscountInformation> discountInfo = new HashMap<>();
     private static FakeDatabase db;
 
     private FakeDatabase() {
-        this.users = new HashMap<>();
-        this.tickets = new HashMap<>();
-        this.events = new HashMap<>();
-        this.auditoriums = new HashMap<>();
-        this.scheduledEvents = new HashMap<>();
     }
 
+    @PostConstruct
     private void init() {
         db = new FakeDatabase();
     }
@@ -55,4 +60,11 @@ public class FakeDatabase {
         return scheduledEvents;
     }
 
+    public Map<Event, CommonInformation> getCommonInfo() {
+        return commonInfo;
+    }
+
+    public Map<DiscountStrategy, DiscountInformation> getDiscountInfo() {
+        return discountInfo;
+    }
 }
