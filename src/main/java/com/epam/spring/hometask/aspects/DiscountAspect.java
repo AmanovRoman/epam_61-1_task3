@@ -5,6 +5,7 @@ import com.epam.spring.hometask.domain.Ticket;
 import com.epam.spring.hometask.domain.User;
 import com.epam.spring.hometask.domain.strategies.discount.DiscountStrategy;
 import com.epam.spring.hometask.domain.utils.DiscountInformation;
+import com.epam.spring.hometask.service.business.DiscountInfoServiceDao;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -23,20 +24,24 @@ import org.springframework.stereotype.Component;
 public class DiscountAspect {
     @Autowired
     ApplicationContext context;
+    @Autowired
+    DiscountInfoServiceDao discountInfoService;
 
     @Around("(execution( * *..*.setDiscount(..)))")
     public Object countDiscountInfo(ProceedingJoinPoint joinPoint) throws Throwable {
         DiscountStrategy strategy = (DiscountStrategy)joinPoint.getArgs()[0];
         User user = strategy.getLastUser();
 
-        DiscountInformation info = DBconnector.getConnection().getDiscountInfo().get(strategy);
+        DiscountInformation info =
+                discountInfoService.
+                        filterByStrategyName(
+                                discountInfoService.findByUserId(user.getId()),
+                                strategy.getDiscountTitle());
+        if (info == null) {
+            info = (DiscountInformation)context.getBean("discountInformation");
+        }
 
-        if (info == null)
-            info = (DiscountInformation) context.getBean("discountInformation");
-
-        info.increaseUserCounter(user);
-        DBconnector.getConnection().getDiscountInfo().put(strategy, info);
-
+        this.discountInfoService.increaseCounter(info);
         return joinPoint.proceed();
     }
 

@@ -1,11 +1,8 @@
 package com.epam.spring.hometask.domain.utils;
 
-import com.epam.spring.hometask.domain.User;
+import com.epam.spring.hometask.domain.DomainId;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Roman_Amanov
@@ -13,27 +10,34 @@ import java.util.Map;
 
 @Component
 @Scope("prototype")
-public class DiscountInformation {
+public class DiscountInformation extends DomainId {
 
-    private Map<User, Integer> userDiscountCounter = new HashMap<>();
+    private int userId;
+    private int userDiscountCounter;
+    private String strategyName;
 
-    public Integer getUserDiscountCounter(User user) {
-        return userDiscountCounter.getOrDefault(user, 0);
+    public int getUserId() {
+        return this.userId;
     }
 
-    public Integer increaseUserCounter(User user) {
-        Integer counter = userDiscountCounter.getOrDefault(user, 0);
-        counter++;
-        userDiscountCounter.put(user, counter);
-        return counter;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
-    public Map<User, Integer> getUserDiscountCounter() {
-        return userDiscountCounter;
+    public int getUserDiscountCounter() {
+        return this.userDiscountCounter;
     }
 
-    public int getTotatlStrings() {
-        return userDiscountCounter.entrySet().stream().mapToInt(Map.Entry::getValue).sum();
+    public void setUserDiscountCounter(int userDiscountCounter) {
+        this.userDiscountCounter = userDiscountCounter;
+    }
+
+    public String getStrategyName() {
+        return this.strategyName;
+    }
+
+    public void setStrategyName(String strategyName) {
+        this.strategyName = strategyName;
     }
 
 }

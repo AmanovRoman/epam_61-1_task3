@@ -24,8 +24,8 @@ public class FakeDatabase {
     private Map<Integer, Event> events = new HashMap<>();
     private Map<Integer, Auditorium> auditoriums = new HashMap<>();
     private Map<Integer, ScheduledEvents> scheduledEvents = new HashMap<>();
-    private Map<Event, CommonInformation> commonInfo = new HashMap<>();
-    private Map<DiscountStrategy, DiscountInformation> discountInfo = new HashMap<>();
+    private Map<Integer, CommonInformation> commonInfo = new HashMap<>();
+    private Map<String, Map<Integer, DiscountInformation>> discountInfo = new HashMap<>();
     private static FakeDatabase db;
 
     private FakeDatabase() {
@@ -60,11 +60,11 @@ public class FakeDatabase {
         return scheduledEvents;
     }
 
-    public Map<Event, CommonInformation> getCommonInfo() {
+    public Map<Integer, CommonInformation> getCommonInfo() {
         return commonInfo;
     }
 
-    public Map<DiscountStrategy, DiscountInformation> getDiscountInfo() {
+    public Map<String, Map<Integer, DiscountInformation>> getDiscountInfo() {
         return discountInfo;
     }
 }
