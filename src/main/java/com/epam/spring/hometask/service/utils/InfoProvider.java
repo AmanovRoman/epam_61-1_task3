@@ -1,13 +1,9 @@
 package com.epam.spring.hometask.service.utils;
 
-import com.epam.spring.hometask.domain.User;
-import com.epam.spring.hometask.domain.strategies.discount.AbstractStrategy;
 import com.epam.spring.hometask.service.business.CommonInfoServiceDao;
 import com.epam.spring.hometask.service.business.DiscountInfoServiceDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.Map;
 
 /**
  * @author Roman_Amanov
@@ -17,20 +13,20 @@ import java.util.Map;
 public class InfoProvider {
 
     @Autowired
-    static CommonInfoServiceDao commonInfoService;
+    CommonInfoServiceDao commonInfoService;
     @Autowired
-    static DiscountInfoServiceDao discountInfoService;
+    DiscountInfoServiceDao discountInfoService;
 
-    public static String getDiscountSummary() {
-        StringBuilder info = new StringBuilder("\nDISCOUNT USAGE SUMMARY:\n---------------------------------------\n");
+    public String getDiscountSummary() {
+        return "\nDISCOUNT USAGE SUMMARY:\n---------------------------------------\n" +
+                discountInfoService.getTextInfo();
 
-        return info.toString();
+
     }
 
-    public static String getCommonSummary() {
-        StringBuilder info = new StringBuilder("\nEVENTS COMMON SUMMARY:\n---------------------------------------\n");
-        commonInfoService.getTextInfo(commonInfoService.getAllCommonInformation());
-        return info.toString();
+    public String getCommonSummary() {
+        return "\nEVENTS COMMON SUMMARY:\n---------------------------------------\n" +
+                commonInfoService.getTextInfo(commonInfoService.getAllCommonInformation());
     }
 
 }

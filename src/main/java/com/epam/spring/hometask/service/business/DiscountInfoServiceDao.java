@@ -4,6 +4,7 @@ package com.epam.spring.hometask.service.business;
 import com.epam.spring.hometask.domain.utils.DiscountInformation;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Roman_Amanov
@@ -12,9 +13,7 @@ import java.util.List;
 public interface DiscountInfoServiceDao {
     int saveInfo(DiscountInformation var1);
 
-    List<DiscountInformation> findByUserId(int var1);
-
-    List<DiscountInformation> findByStrategyName(String var1);
+    Map<Integer, DiscountInformation> findByStrategyName(String var1);
 
     default DiscountInformation filterByStrategyName(List<DiscountInformation> list, String name) {
         return (DiscountInformation)list.stream().filter((discountInfo) -> {
@@ -22,7 +21,7 @@ public interface DiscountInfoServiceDao {
         }).findFirst().orElse(null);
     }
 
-    int increaseCounter(DiscountInformation var1);
+    int increaseCounter(DiscountInformation info);
 
-    String getTextInfo(List<DiscountInformation> var1);
+    String getTextInfo();
 }

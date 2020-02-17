@@ -6,9 +6,7 @@ import com.epam.spring.hometask.domain.utils.DiscountInformation;
 import com.epam.spring.hometask.service.domain.DiscountInfoDao;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
 
 /**
  * @author Roman_Amanov
@@ -17,26 +15,24 @@ import java.util.stream.Collectors;
 @Repository
 public class DiscountInfoDaoImpl extends DBconnector implements DiscountInfoDao {
 
-
     @Override
-    public List<DiscountInformation> getByUserId(int userId) {
-        return DBconnector.getConnection().getDiscountInfo().values().stream().filter(info -> info.getUserId() == userId).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<DiscountInformation> getByDiscountName(String name) {
-        return DBconnector.getConnection().getDiscountInfo().values().stream().filter(info -> info.getStrategyName().equals(name)).collect(Collectors.toList());
+    public Map<Integer, DiscountInformation> getByDiscountName(String name) {
+        return DBconnector.getConnection().getDiscountInfo().get(name);
     }
 
     @Override
     public boolean update(DiscountInformation info) {
-        return DBconnector.getConnection().getDiscountInfo().put(info.getStrategyName(), info) != null;
+        return save(info) > 0;
     }
 
     @Override
     public int save(DiscountInformation info) {
-        DBconnector.getConnection().getDiscountInfo().put(info.getStrategyName(), info);
-        return 0;
+        Map<Integer, DiscountInformation> list = DBconnector.getConnection().getDiscountInfo().get(info.getStrategyName());
+        if (list == null)
+            list = new HashMap<>();
+        DiscountInformation r = list.put(info.getUserId(), info);
+        DBconnector.getConnection().getDiscountInfo().put(info.getStrategyName(), list);
+        return (r == null)?0:r.getUserId();
     }
 
     @Override
@@ -51,6 +47,19 @@ public class DiscountInfoDaoImpl extends DBconnector implements DiscountInfoDao 
 
     @Override
     public List<DiscountInformation> getAll() {
-        return new ArrayList<>(DBconnector.getConnection().getDiscountInfo().values());
+//        return Arrays.asList(DBconnector.getConnection().getDiscountInfo().values().stream().toArray());
+        return null;
     }
+
+    @Override
+    public Set<String> getAllDiscountNames() {
+        return DBconnector.getConnection().getDiscountInfo().keySet();
+    }
+
+    @Override
+    public long countByName(String discountName) {
+        Map<Integer, DiscountInformation> list = DBconnector.getConnection().getDiscountInfo().get(discountName);
+        return list.values().stream().mapToInt(DiscountInformation::getUserDiscountCounter).sum();
+    }
+
 }

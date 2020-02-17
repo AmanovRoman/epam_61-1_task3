@@ -2,9 +2,9 @@ package com.epam.spring.hometask.service.business.impl;
 
 
 import com.epam.spring.hometask.domain.User;
-import com.epam.spring.hometask.domain.strategies.discount.AbstractStrategy;
 import com.epam.spring.hometask.domain.utils.DiscountInformation;
 import com.epam.spring.hometask.service.business.DiscountInfoServiceDao;
+import com.epam.spring.hometask.service.business.UserServiceDao;
 import com.epam.spring.hometask.service.domain.DiscountInfoDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -21,37 +21,40 @@ public class DiscountInfoServiceImpl implements DiscountInfoServiceDao {
     @Autowired
     DiscountInfoDao discountInfo;
 
+    @Autowired
+    UserServiceDao userService;
+
+    @Override
     public int saveInfo(DiscountInformation info) {
         return discountInfo.save(info);
     }
 
-    public List<DiscountInformation> findByUserId(int userId) {
-        return discountInfo.getByUserId(userId);
-    }
-
-    public List<DiscountInformation> findByStrategyName(String name) {
+    @Override
+    public Map<Integer, DiscountInformation> findByStrategyName(String name) {
         return discountInfo.getByDiscountName(name);
     }
 
+    @Override
     public int increaseCounter(DiscountInformation info) {
         info.setUserDiscountCounter(info.getUserDiscountCounter()+1);
         discountInfo.update(info);
         return info.getUserDiscountCounter();
     }
 
-    public String getTextInfo(List<DiscountInformation> list) {
+    @Override
+    public String getTextInfo() {
         StringBuilder text = new StringBuilder();
-        discountInfo.getAll().forEach(info -> {
-            text.append(info.getStrategyName()).
-                    append(" (total " + value.getTotatlStrings() + ")").
+        discountInfo.getAllDiscountNames().forEach(discountName -> {
+            text.append(discountName).append(" (total ").append(discountInfo.countByName(discountName)).append(")").
                     append("\n");
-            for (Map.Entry<User, Integer> userIntegerEntry : value.getUserDiscountCounter().entrySet()) {
-                User user = userIntegerEntry.getKey();
+            for (DiscountInformation value : discountInfo.getByDiscountName(discountName).values()) {
+                User user = userService.getUserById(value.getUserId());
                 text.append("\t").
                         append(user == null ? "Not registered user" : user.getFirstName()).
                         append(" - ").
-                        append(userIntegerEntry.getValue()).append("\n");
+                        append(value.getUserDiscountCounter()).append("\n");
             }
         });
+        return text.toString();
     }
 }

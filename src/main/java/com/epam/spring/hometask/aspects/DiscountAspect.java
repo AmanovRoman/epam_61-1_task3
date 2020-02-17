@@ -14,6 +14,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
 /**
  * @author Roman_Amanov
  */
@@ -31,14 +33,15 @@ public class DiscountAspect {
     public Object countDiscountInfo(ProceedingJoinPoint joinPoint) throws Throwable {
         DiscountStrategy strategy = (DiscountStrategy)joinPoint.getArgs()[0];
         User user = strategy.getLastUser();
+        DiscountInformation info = null;
+        Map<Integer, DiscountInformation> table = discountInfoService.findByStrategyName(strategy.getDiscountTitle());
+        if (table != null)
+            info = table.get((user==null)?0:user.getId());
 
-        DiscountInformation info =
-                discountInfoService.
-                        filterByStrategyName(
-                                discountInfoService.findByUserId(user.getId()),
-                                strategy.getDiscountTitle());
         if (info == null) {
             info = (DiscountInformation)context.getBean("discountInformation");
+            info.setUserId((user==null)?0:user.getId());
+            info.setStrategyName(strategy.getDiscountTitle());
         }
 
         this.discountInfoService.increaseCounter(info);
