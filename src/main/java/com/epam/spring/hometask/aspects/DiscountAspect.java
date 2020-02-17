@@ -5,6 +5,7 @@ import com.epam.spring.hometask.domain.Ticket;
 import com.epam.spring.hometask.domain.User;
 import com.epam.spring.hometask.domain.strategies.discount.DiscountStrategy;
 import com.epam.spring.hometask.domain.utils.DiscountInformation;
+import com.epam.spring.hometask.service.business.DiscountInfoServiceDao;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 /**
  * @author Roman_Amanov
@@ -23,20 +26,25 @@ import org.springframework.stereotype.Component;
 public class DiscountAspect {
     @Autowired
     ApplicationContext context;
+    @Autowired
+    DiscountInfoServiceDao discountInfoService;
 
     @Around("(execution( * *..*.setDiscount(..)))")
     public Object countDiscountInfo(ProceedingJoinPoint joinPoint) throws Throwable {
         DiscountStrategy strategy = (DiscountStrategy)joinPoint.getArgs()[0];
         User user = strategy.getLastUser();
+        DiscountInformation info = null;
+        Map<Integer, DiscountInformation> table = discountInfoService.findByStrategyName(strategy.getDiscountTitle());
+        if (table != null)
+            info = table.get((user==null)?0:user.getId());
 
-        DiscountInformation info = DBconnector.getConnection().getDiscountInfo().get(strategy);
+        if (info == null) {
+            info = (DiscountInformation)context.getBean("discountInformation");
+            info.setUserId((user==null)?0:user.getId());
+            info.setStrategyName(strategy.getDiscountTitle());
+        }
 
-        if (info == null)
-            info = (DiscountInformation) context.getBean("discountInformation");
-
-        info.increaseUserCounter(user);
-        DBconnector.getConnection().getDiscountInfo().put(strategy, info);
-
+        this.discountInfoService.increaseCounter(info);
         return joinPoint.proceed();
     }
 

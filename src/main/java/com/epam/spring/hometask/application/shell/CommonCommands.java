@@ -43,6 +43,9 @@ public class CommonCommands {
     @Autowired
     private TicketServiceDao ticketService;
 
+    @Autowired
+    InfoProvider infoProvider;
+
     @ShellMethod(value = "Automatic fill database", key = "auto")
     public void autoFill() {
 
@@ -55,12 +58,13 @@ public class CommonCommands {
         auditoriumService.getAllAuditoriums().forEach(System.out::println);
 
         System.out.println("\nEVENTS:\n----------------------------------------");
-        eventService.addNewEvent("The Hobbit", 11, 3, 2);
+        eventService.addNewEvent("The Hobbit", 11, 3, 1);
         eventService.getAllEvents().forEach(System.out::println);
+        eventService.getEventByName("The Hobbit");
 
         System.out.println("\nSCHEDULED EVENTS:\n----------------------------------------");
-        scheduledService.setNewEventSchedule(1, 1, "2020-01-01 20:10", 1.5, 2);
-        scheduledService.setNewEventSchedule(1, 2, "2020-01-02 20:10", 1.9, 2);
+        scheduledService.setNewEventSchedule(1, 1, "2020-01-01 20:10", 1.5, 1);
+        scheduledService.setNewEventSchedule(1, 2, "2020-01-02 20:10", 1.9, 1);
         scheduledService.getAllScheduled().forEach(System.out::println);
 
         System.out.println("\nTICKETS:\n----------------------------------------");
@@ -75,12 +79,12 @@ public class CommonCommands {
 
     @ShellMethod(value = "Show discount information", key = "info discount")
     public String showDiscountInfo() {
-        return InfoProvider.getDiscountSummary();
+        return infoProvider.getDiscountSummary();
     }
 
     @ShellMethod(value = "Show event information", key = "info event")
     public String showEventInfo() {
-        return InfoProvider.getCommonSummary();
+        return infoProvider.getCommonSummary();
     }
 
 

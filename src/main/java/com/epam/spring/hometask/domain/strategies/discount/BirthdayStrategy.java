@@ -23,7 +23,7 @@ public class BirthdayStrategy extends AbstractStrategy implements DiscountStrate
     @Value("${discount.birthday.rule}")
     private int beforeAfter;
 
-    public BirthdayStrategy(@Value("${discount.birthday.rule}") double discountValue) {
+    public BirthdayStrategy(@Value("${discount.birthday.value}") double discountValue) {
         super(discountValue, "Birthday discount");
     }
 

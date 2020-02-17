@@ -4,6 +4,7 @@ import com.epam.spring.hometask.data.DBconnector;
 import com.epam.spring.hometask.domain.Event;
 import com.epam.spring.hometask.domain.Ticket;
 import com.epam.spring.hometask.domain.utils.CommonInformation;
+import com.epam.spring.hometask.service.business.CommonInfoServiceDao;
 import com.epam.spring.hometask.service.business.EventServiceDao;
 import com.epam.spring.hometask.service.business.ScheduledServiceDao;
 import com.epam.spring.hometask.service.business.TicketServiceDao;
@@ -31,13 +32,16 @@ public class CounterAspect {
     @Autowired
     EventServiceDao eventService;
 
+    @Autowired
+    CommonInfoServiceDao commonInfoService;
+
     // count how many times each event was accessed by name
     @AfterReturning(value = "execution(* *.getEventByName(..))", returning = "retVal")
     public void countEventAccess(Event retVal) {
-        if (retVal == null) return;
-        CommonInformation info = getInfo(retVal);
-        info.increaseAccessedByName();
-        DBconnector.getConnection().getCommonInfo().put(retVal, info);
+        if (retVal != null) {
+            CommonInformation info = getInfo(retVal);
+            this.commonInfoService.increaseAccessedByName(info);
+        }
     }
 
     // how many times its prices were queried
@@ -46,30 +50,30 @@ public class CounterAspect {
         Object o = joinPoint.proceed();
         Event event = (Event) joinPoint.getThis();
         CommonInformation info = getInfo(event);
-        info.increasePriceQueried();
-        DBconnector.getConnection().getCommonInfo().put(event, info);
+        this.commonInfoService.increasePriceQueried(info);
         return o;
     }
 
     // how many times its tickets were booked
     @AfterReturning(value = "execution(* *.bookTickets(..)))", returning = "retVal")
     public void countTicketBooking(List<Ticket> retVal) {
-        retVal.forEach(ticket -> {
-            Event event = eventService.getEventById(
-                    scheduledService.getScheduledById(ticket.getScheduledEventId()).getEventId()
-            );
-            if (event == null) return;
-            CommonInformation info = getInfo(event);
-            info.increaseTicketBooked();
-            DBconnector.getConnection().getCommonInfo().put(event, info);
+        retVal.forEach((ticket) -> {
+            Event event = this.eventService.getEventById(
+                    scheduledService.getScheduledById(
+                            ticket.getScheduledEventId()).getEventId());
+            if (event != null) {
+                CommonInformation info = getInfo(event);
+                this.commonInfoService.increaseTicketBooked(info);
+            }
         });
     }
 
     private CommonInformation getInfo(Event event) {
-        CommonInformation info = DBconnector.getConnection().getCommonInfo().get(event);
+        CommonInformation info = commonInfoService.findByEventId(event.getId());
         if (info == null) {
             info = (CommonInformation) context.getBean("commonInformation");
-            info.setEvent(event);
+            info.setEventId(event.getId());
+            this.commonInfoService.saveInfo(info);
         }
         return info;
     }
