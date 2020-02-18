@@ -6,7 +6,7 @@ import com.epam.spring.hometask.service.business.UserServiceDao;
 import com.epam.spring.hometask.service.domain.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.Objects;
  * @author Roman_Amanov
  */
 
-@Component
+@Service
 public class UserServiceDaoImpl implements UserServiceDao {
 
     @Autowired
@@ -31,8 +31,8 @@ public class UserServiceDaoImpl implements UserServiceDao {
     }
 
     @Override
-    public int addNewUser(String fName, String sName, String email, int userType) throws IllegalArgumentException{
-        UserType type = UserType.values()[userType-1];
+    public int addNewUser(String fName, String sName, String email, int userType) throws IllegalArgumentException {
+        UserType type = UserType.values()[userType - 1];
         if (type == null)
             throw new IllegalArgumentException("Wrong user type");
         User user = (User) context.getBean("user");

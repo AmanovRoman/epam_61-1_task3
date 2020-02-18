@@ -11,16 +11,13 @@ import java.util.Map;
  */
 
 public interface DiscountInfoServiceDao {
-    int saveInfo(DiscountInformation var1);
+    int saveInfo(DiscountInformation info);
 
-    Map<Integer, DiscountInformation> findByStrategyName(String var1);
+    Map<Integer, DiscountInformation> findByStrategyName(String discount);
 
     default DiscountInformation filterByStrategyName(List<DiscountInformation> list, String name) {
-        return (DiscountInformation)list.stream().filter((discountInfo) -> {
-            return discountInfo.getStrategyName().equals(name);
-        }).findFirst().orElse(null);
+        return (DiscountInformation)list.stream().filter((discountInfo) -> discountInfo.getStrategyName().equals(name)).findFirst().orElse(null);
     }
-
     int increaseCounter(DiscountInformation info);
 
     String getTextInfo();
