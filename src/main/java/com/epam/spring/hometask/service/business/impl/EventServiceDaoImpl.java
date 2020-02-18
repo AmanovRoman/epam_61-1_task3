@@ -9,14 +9,14 @@ import com.epam.spring.hometask.service.business.UserServiceDao;
 import com.epam.spring.hometask.service.domain.EventDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  * @author Roman_Amanov
  */
-@Component
+@Service
 public class EventServiceDaoImpl implements EventServiceDao {
     @Autowired
     private EventDao eventDao;
@@ -45,7 +45,7 @@ public class EventServiceDaoImpl implements EventServiceDao {
     @Override
     public int addNewEvent(Event event, User user) throws IllegalArgumentException {
         try {
-            if (UserType.values()[user.getUserType()-1] != UserType.ADMIN)
+            if (UserType.values()[user.getUserType() - 1] != UserType.ADMIN)
                 throw new IllegalArgumentException("Wrong user");
         } catch (NullPointerException e) {
             throw new IllegalArgumentException("User type must be ADMIN");
@@ -55,8 +55,8 @@ public class EventServiceDaoImpl implements EventServiceDao {
 
     @Override
     public int addNewEvent(String name, double basePrice, int eventRating, int userId) throws IllegalArgumentException {
-        EventRating rating = EventRating.values()[eventRating-1];
-        if (name.length() < 3 || rating==null)
+        EventRating rating = EventRating.values()[eventRating - 1];
+        if (name.length() < 3 || rating == null)
             throw new IllegalArgumentException("Illegal arguments");
         Event event = (Event) context.getBean("event");
         event.setName(name);

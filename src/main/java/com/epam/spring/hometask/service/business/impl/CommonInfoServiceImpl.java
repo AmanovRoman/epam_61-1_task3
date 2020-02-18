@@ -6,7 +6,7 @@ import com.epam.spring.hometask.service.business.CommonInfoServiceDao;
 import com.epam.spring.hometask.service.domain.CommonInfoDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
  * @author Roman_Amanov
  */
 
-@Repository
+@Service
 @Primary
 public class CommonInfoServiceImpl implements CommonInfoServiceDao {
     @Autowired
@@ -52,7 +52,7 @@ public class CommonInfoServiceImpl implements CommonInfoServiceDao {
 
     public String getTextInfo(List<CommonInformation> list) {
         StringBuilder text = new StringBuilder();
-        getAllCommonInformation().forEach(info ->  {
+        getAllCommonInformation().forEach(info -> {
             text.append("Event id #").append(info.getEventId()).
                     append("\n");
             text.append("\tEvent access by name count: ").append(info.getAccessedByNameCounter()).append("\n");

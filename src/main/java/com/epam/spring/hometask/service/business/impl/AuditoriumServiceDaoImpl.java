@@ -5,7 +5,7 @@ import com.epam.spring.hometask.service.business.AuditoriumServiceDao;
 import com.epam.spring.hometask.service.domain.AuditoriumDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  * @author Roman_Amanov
  */
 
-@Component
+@Service
 public class AuditoriumServiceDaoImpl implements AuditoriumServiceDao {
     @Autowired
     ApplicationContext context;

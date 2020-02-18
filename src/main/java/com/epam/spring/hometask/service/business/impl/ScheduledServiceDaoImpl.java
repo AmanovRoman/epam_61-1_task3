@@ -12,7 +12,7 @@ import com.epam.spring.hometask.service.business.UserServiceDao;
 import com.epam.spring.hometask.service.domain.ScheduleEventDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  * @author Roman_Amanov
  */
 
-@Component
+@Service
 public class ScheduledServiceDaoImpl implements ScheduledServiceDao {
     @Autowired
     ApplicationContext context;
@@ -55,7 +55,7 @@ public class ScheduledServiceDaoImpl implements ScheduledServiceDao {
                 auditoriumService.getAuditoriumById(auditoriumId),
                 LocalDateTime.parse(eventTime, formatter),
                 ticketPriceMultiplier,
-                UserType.values()[user.getUserType()-1]);
+                UserType.values()[user.getUserType() - 1]);
     }
 
     @Override

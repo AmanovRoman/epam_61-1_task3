@@ -7,16 +7,15 @@ import com.epam.spring.hometask.service.business.DiscountInfoServiceDao;
 import com.epam.spring.hometask.service.business.UserServiceDao;
 import com.epam.spring.hometask.service.domain.DiscountInfoDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Map;
 
 /**
  * @author Roman_Amanov
  */
 
-@Repository
+@Service
 public class DiscountInfoServiceImpl implements DiscountInfoServiceDao {
     @Autowired
     DiscountInfoDao discountInfo;
@@ -36,7 +35,7 @@ public class DiscountInfoServiceImpl implements DiscountInfoServiceDao {
 
     @Override
     public int increaseCounter(DiscountInformation info) {
-        info.setUserDiscountCounter(info.getUserDiscountCounter()+1);
+        info.setUserDiscountCounter(info.getUserDiscountCounter() + 1);
         discountInfo.update(info);
         return info.getUserDiscountCounter();
     }

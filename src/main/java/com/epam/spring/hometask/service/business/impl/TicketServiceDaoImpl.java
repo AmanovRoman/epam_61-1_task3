@@ -6,7 +6,7 @@ import com.epam.spring.hometask.service.business.*;
 import com.epam.spring.hometask.service.domain.TicketDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import static java.util.Objects.isNull;
 /**
  * @author Roman_Amanov
  */
-@Component
+@Service
 public class TicketServiceDaoImpl implements TicketServiceDao {
 
     @Autowired
