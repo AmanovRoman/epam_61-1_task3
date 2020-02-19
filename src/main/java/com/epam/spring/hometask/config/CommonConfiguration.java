@@ -1,17 +1,12 @@
 package com.epam.spring.hometask.config;
 
 import com.epam.spring.hometask.domain.Auditorium;
-import com.epam.spring.hometask.service.business.AuditoriumServiceDao;
-import com.epam.spring.hometask.service.business.EventServiceDao;
-import com.epam.spring.hometask.service.business.UserServiceDao;
-import com.epam.spring.hometask.service.business.impl.AuditoriumServiceDaoImpl;
+import com.epam.spring.hometask.service.AuditoriumService;
+import com.epam.spring.hometask.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Set;
 
 /**
@@ -62,7 +57,7 @@ public class CommonConfiguration {
     }
 
     @Bean
-    boolean preReadyLoader(@Autowired AuditoriumServiceDao auditoriumService, @Autowired UserServiceDao userService) {
+    boolean preReadyLoader(@Autowired AuditoriumService auditoriumService, @Autowired UserService userService) {
         auditoriumService.addNewAuditorium(firstAuditorium());
         auditoriumService.addNewAuditorium(secondAuditorium());
         userService.addNewUser("Admin", "Adminych", "Jena@Jizni.net", 1);

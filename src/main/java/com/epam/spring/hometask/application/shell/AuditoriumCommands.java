@@ -1,7 +1,7 @@
 package com.epam.spring.hometask.application.shell;
 
 import com.epam.spring.hometask.domain.Auditorium;
-import com.epam.spring.hometask.service.business.AuditoriumServiceDao;
+import com.epam.spring.hometask.service.AuditoriumService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -17,7 +17,7 @@ import org.springframework.shell.standard.ShellMethod;
 public class AuditoriumCommands {
 
     @Autowired
-    AuditoriumServiceDao auditoriumService;
+    AuditoriumService auditoriumService;
 
     @ShellMethod(value = "Show whole auditorium list", key = "auds")
     public void showAuditories() {
