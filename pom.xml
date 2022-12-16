@@ -11,7 +11,7 @@
     <description>Epam spring training. Task 2</description>
 
     <properties>
-        <spring.version>5.2.3.RELEASE</spring.version>
+        <spring.version>5.2.20.RELEASE</spring.version>
         <junit.version>5.5.2</junit.version>
     </properties>
 
